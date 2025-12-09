@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-three.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/loaders/GLTFLoader.js"></script>
+
+    <style>
+      body, html { margin: 0; overflow: hidden; }
+      #ar-container { width: 100vw; height: 100vh; }
+      img.ar-img {
+        width: 600px;
+        animation: float 2s ease-in-out infinite;
+      }
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="ar-container"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const mindarThree = new window.MINDAR.MindARThree({
+          container: document.querySelector("#ar-container"),
+          imageTargetSrc: "./winter2025.mind",
+        });
+
+        const { renderer, scene, camera } = mindarThree;
+
+        // === ここに塾長PNGを読み込む ===
+        const loader = new THREE.TextureLoader();
+        loader.load("./juku.png", (texture) => {
+          const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+          const geometry = new THREE.PlaneGeometry(1, 1.8); // 縦横比を調整
+          const mesh = new THREE.Mesh(geometry, material);
+
+          mesh.position.set(0, 0.1, 0);
+          mesh.scale.set(1.2, 1.2, 1.2);
+
+          const anchor = mindarThree.addAnchor(0);
+          anchor.group.add(mesh);
+        });
+
+        // === スタート ===
+        mindarThree.start();
+        renderer.setAnimationLoop(() => {
+          renderer.render(scene, camera);
+        });
+      });
+    </script>
+  </body>
+</html>
