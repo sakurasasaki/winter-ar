@@ -1,46 +1,62 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title>Camera Test</title>
+    <meta charset="UTF-8" />
+    <title>Winter AR</title>
+
+    <!-- MindAR (A-Frame版：iPhone Safariで安定) -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
     <style>
-      body {
-        margin: 0;
-        background: #000;
-        color: #fff;
-        font-family: system-ui, sans-serif;
-        text-align: center;
-      }
-      button {
-        margin-top: 40px;
+      body, html { margin: 0; padding: 0; background: #000; }
+      #start {
+        position: fixed;
+        z-index: 10;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
         padding: 14px 28px;
         font-size: 18px;
-      }
-      video {
-        width: 100vw;
-        height: auto;
-        margin-top: 20px;
+        border-radius: 999px;
+        border: none;
+        background: #1e90ff;
+        color: #fff;
       }
     </style>
   </head>
 
   <body>
-    <h2>📷 カメラ起動テスト</h2>
-    <p>下のボタンを押してカメラ許可が出るか確認します</p>
-    <button id="start">カメラ起動</button>
-    <video id="video" autoplay playsinline></video>
+    <button id="start">AR START</button>
+
+    <a-scene
+      mindar-image="imageTargetSrc: winter2025.mind;"
+      embedded
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+    >
+      <a-assets>
+        <img id="juku" src="juku.png" />
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <!-- チラシ認識したときに表示される塾長 -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-image
+          src="#juku"
+          position="0 0.1 0"
+          height="1.8"
+          width="1"
+        ></a-image>
+      </a-entity>
+    </a-scene>
 
     <script>
-      const btn = document.getElementById("start");
-      const video = document.getElementById("video");
-
-      btn.addEventListener("click", async () => {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          video.srcObject = stream;
-        } catch (e) {
-          alert("カメラ起動に失敗: " + e);
-        }
+      const startButton = document.getElementById("start");
+      startButton.addEventListener("click", () => {
+        document.querySelector("a-scene").components["mindar-image"].start();
+        startButton.style.display = "none";
       });
     </script>
   </body>
