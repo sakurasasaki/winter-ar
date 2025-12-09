@@ -67,7 +67,7 @@
 
         startButton.addEventListener("click", async () => {
           try {
-            const mindar = sceneEl.components["mindar-image"];
+            const mindar = sceneEl.systems["mindar-image-system"];
             console.log("mindar:", mindar);
 
             await mindar.start();   // ← ここで初めて安全に start
@@ -81,3 +81,4 @@
     </script>
   </body>
 </html>
+
