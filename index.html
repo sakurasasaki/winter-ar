@@ -1,109 +1,47 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <title>Winter AR</title>
-
-    <!-- MindAR & three.js -->
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image.prod.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-three.prod.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-
+    <meta charset="UTF-8">
+    <title>Camera Test</title>
     <style>
-      body, html {
+      body {
         margin: 0;
-        padding: 0;
         background: #000;
         color: #fff;
         font-family: system-ui, sans-serif;
         text-align: center;
       }
-      #start-screen {
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-      }
-      #start-button {
-        padding: 12px 24px;
+      button {
+        margin-top: 40px;
+        padding: 14px 28px;
         font-size: 18px;
-        border-radius: 999px;
-        border: none;
-        background: #1e90ff;
-        color: #fff;
       }
-      #start-button:active {
-        opacity: 0.8;
-      }
-      #ar-container {
+      video {
         width: 100vw;
-        height: 100vh;
-        display: none;
+        height: auto;
+        margin-top: 20px;
       }
     </style>
   </head>
 
   <body>
-    <!-- スタート画面 -->
-    <div id="start-screen">
-      <div>📱 カメラを使ったARを起動します</div>
-      <div>「START」を押してから、冬期講習チラシにかざしてね</div>
-      <button id="start-button">AR START</button>
-    </div>
-
-    <!-- AR表示用コンテナ -->
-    <div id="ar-container"></div>
+    <h2>📷 カメラ起動テスト</h2>
+    <p>下のボタンを押してカメラ許可が出るか確認します</p>
+    <button id="start">カメラ起動</button>
+    <video id="video" autoplay playsinline></video>
 
     <script>
-      const startScreen = document.getElementById("start-screen");
-      const startButton = document.getElementById("start-button");
-      const arContainer = document.getElementById("ar-container");
+      const btn = document.getElementById("start");
+      const video = document.getElementById("video");
 
-      startButton.addEventListener("click", async () => {
-  alert("ボタンは反応してるよ！");
-
-        // スタート画面を隠してAR画面を表示
-        startScreen.style.display = "none";
-        arContainer.style.display = "block";
-
-        // MindARのセットアップ
-        const mindarThree = new window.MINDAR.MindARThree({
-          container: arContainer,
-          imageTargetSrc: "./winter2025.mind",  // さっき作った .mind
-        });
-
-        const { renderer, scene, camera } = mindarThree;
-
-        // 塾長PNGを読み込み（juku.png）
-        const loader = new THREE.TextureLoader();
-        loader.load("./juku.png", (texture) => {
-          const material = new THREE.MeshBasicMaterial({
-            map: texture,
-            transparent: true,
-          });
-
-          // 縦長な画像なので、比率を少し縦長に
-          const geometry = new THREE.PlaneGeometry(1, 1.8);
-          const mesh = new THREE.Mesh(geometry, material);
-
-          // 位置とサイズを少し調整
-          mesh.position.set(0, 0.1, 0);
-          mesh.scale.set(1.2, 1.2, 1.2);
-
-          const anchor = mindarThree.addAnchor(0);
-          anchor.group.add(mesh);
-        });
-
-        // AR開始
-        await mindarThree.start();
-        renderer.setAnimationLoop(() => {
-          renderer.render(scene, camera);
-        });
+      btn.addEventListener("click", async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+        } catch (e) {
+          alert("カメラ起動に失敗: " + e);
+        }
       });
     </script>
   </body>
 </html>
-
