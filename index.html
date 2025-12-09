@@ -14,29 +14,30 @@
         margin: 0;
         background: #000;
         overflow: hidden;
+        font-family: system-ui, sans-serif;
       }
-      #start {
+
+      #hint {
         position: fixed;
         z-index: 10;
         bottom: 24px;
         left: 50%;
         transform: translateX(-50%);
-        padding: 14px 32px;
-        font-size: 18px;
+        padding: 14px 20px;
+        font-size: 16px;
         border-radius: 999px;
-        border: none;
-        background: #ff4500;
+        background: rgba(0,0,0,0.7);
         color: #fff;
       }
     </style>
   </head>
 
   <body>
-    <button id="start">AR START</button>
+    <!-- 案内表示（ボタンはもう不要） -->
+    <div id="hint">📱 カメラを許可してチラシにかざしてね</div>
 
     <a-scene
-      id="scene"
-      mindar-image="imageTargetSrc: winter2025.mind; autoStart: false;"
+      mindar-image="imageTargetSrc: winter2025.mind;"
       embedded
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
@@ -47,6 +48,7 @@
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
+      <!-- チラシを認識したら塾長表示 -->
       <a-entity mindar-image-target="targetIndex: 0">
         <a-image
           src="#juku"
@@ -56,29 +58,5 @@
         ></a-image>
       </a-entity>
     </a-scene>
-
-    <script>
-      const startButton = document.getElementById("start");
-      const sceneEl = document.getElementById("scene");
-
-      // ✅ A-Frame の scene が完全に読み込まれてから開始可能にする
-      sceneEl.addEventListener("loaded", () => {
-        console.log("scene loaded");
-
-        startButton.addEventListener("click", async () => {
-          try {
-            const mindar = sceneEl.systems["mindar-image-system"];
-            console.log("mindar:", mindar);
-
-            await mindar.start();   // ← ここで初めて安全に start
-            startButton.style.display = "none";
-
-          } catch (e) {
-            alert("AR起動エラー: " + e);
-          }
-        });
-      });
-    </script>
   </body>
 </html>
-
