@@ -23,7 +23,31 @@
         z-index: 0;
       }
 
-      /* 塾長PNG */
+      /* ✅ ネオン文字 */
+      #neon {
+        position: fixed;
+        top: 64px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 24px;
+        font-weight: 900;
+        color: #00ffff;
+        z-index: 3;
+        text-shadow:
+          0 0 5px #00ffff,
+          0 0 10px #00ffff,
+          0 0 20px #00ffff,
+          0 0 40px #00e5ff;
+        animation: neonPulse 1.5s ease-in-out infinite;
+      }
+
+      @keyframes neonPulse {
+        0%   { opacity: 1; }
+        50%  { opacity: 0.6; }
+        100% { opacity: 1; }
+      }
+
+      /* ✅ 塾長PNG */
       #juku {
         position: fixed;
         bottom: 80px;
@@ -35,10 +59,10 @@
         animation: float 2s ease-in-out infinite;
       }
 
-      /* キャッチコピー */
+      /* ✅ キャッチコピー */
       #copy {
         position: fixed;
-        top: 24px;
+        top: 120px;
         left: 50%;
         transform: translateX(-50%);
         background: rgba(0,0,0,0.7);
@@ -50,7 +74,7 @@
         font-weight: bold;
       }
 
-      /* 体験ボタン */
+      /* ✅ 体験ボタン */
       #cta {
         position: fixed;
         bottom: 20px;
@@ -65,6 +89,7 @@
         z-index: 2;
       }
 
+      /* ✅ スタート画面 */
       #start {
         position: fixed;
         inset: 0;
@@ -97,19 +122,26 @@
 
   <body>
 
-    <!-- スタート画面 -->
+    <!-- ✅ スタート画面 -->
     <div id="start">
       <div>📷 カメラを起動します</div>
       <div>ボタンを押してね</div>
       <button id="startBtn">START</button>
     </div>
 
-    <!-- カメラ映像 -->
+    <!-- ✅ カメラ映像 -->
     <video id="video" autoplay playsinline></video>
 
-    <!-- オーバーレイ表示 -->
+    <!-- ✅ ネオン文字 -->
+    <div id="neon">WINTER 冬期講習 開講！</div>
+
+    <!-- ✅ 塾長PNG -->
     <img id="juku" src="juku.png">
+
+    <!-- ✅ キャッチコピー -->
     <div id="copy">全力で、結果を出す</div>
+
+    <!-- ✅ 体験ボタン -->
     <a id="cta" href="#" target="_blank">体験受付中</a>
 
     <script>
@@ -133,5 +165,3 @@
 
   </body>
 </html>
-
-
